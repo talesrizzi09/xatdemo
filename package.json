@@ -1,0 +1,32 @@
+{
+  "name": "chatapi",
+  "version": "1.0.0",
+  "description": "\"API-CHAT\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talesrizzi09/xatdemo.git"
+  },
+  "keywords": [
+    "node",
+    "chat",
+    "api"
+  ],
+  "author": "tales rizzi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/talesrizzi09/xatdemo/issues"
+  },
+  "homepage": "https://github.com/talesrizzi09/xatdemo#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "scripts":{
+    "start": "node ./bin/server.js",
+    "test": "echo \"Error: no test specified"
+  }
+}
