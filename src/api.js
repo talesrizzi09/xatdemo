@@ -14,6 +14,12 @@ app.use('/', router.get('/sobre',(req, res, next)=>{
         "versão":"0.1.0",
         "autor":"tales rizzi"
     })
-}))
+}));
+
+app.use('/', router.get('/salas',(req, res, next)=>{
+    const salaController = require("./controllers/salaControllers/");
+    let resp = salaController.get();
+    res.status(200).send(resp);
+}));
 
 module.exports=app;
