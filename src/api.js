@@ -19,14 +19,14 @@ app.use('/', router.get('/sobre',(req, res, next)=>{
 
 app.use("/salas",router.get("/salas", async (req, res,next) => {
     const token = require("./util/token");
-    const salaController = require("./controllers/salaController");
+    const salaController = require("./controllers/salaControllers.js");
     const test = await token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick);
     console.log(test)
     if (test) {
         let resp = await salaController.get();
         res.status(200).send(resp);
     } else {
-        res.status(401).send({msg:"Usuário não autorizado"});
+        res.status(401).send({msg:"Seu usuário não foi autorizado, verifique."});
     }
 })); 
 
