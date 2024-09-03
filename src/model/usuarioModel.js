@@ -4,8 +4,8 @@ async function registrarUsuario(nick) {
     return await db.insertOne("usuarios",{"nick": nick});
 };
 
-let buscarUsuario = async (idUser) => {
-    let user = await db.findOne("usuarios", idUser);
+let buscarUsuario = async (_id) => {
+    let user = await db.findOne("usuarios", _id);
     return user;
 };
   

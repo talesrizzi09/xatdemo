@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-async function checkToken (token, id, key) {
+async function checkToken (token, id, key, nick) {
     return jwt.verify(token, key, (err, decoded) => {
         let autorizacao = false;
         if (err) {
@@ -18,11 +18,12 @@ async function checkToken (token, id, key) {
     }
 )};
 
-async function setToken (id, key) {
+async function setToken (id, key, nick) {
     console.log("id: "+id);
+    console.log("nick: "+nick);
 
     if (id) {
-        return jwt.sign({id}, key, {expiresIn: 28800});
+        return jwt.sign({id}, key, nick, {expiresIn: 28800});
     }
     return false;
 };

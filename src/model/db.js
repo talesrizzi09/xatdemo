@@ -17,6 +17,8 @@ async function connect() {
     return singleton;
 }
 
+
+
 let findAll = async (collection) => {
     const db = await connect();
     return await db.collection(collection).find().toArray();    

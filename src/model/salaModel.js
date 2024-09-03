@@ -6,6 +6,7 @@ let listarSalas = async () => {
     return salas;
 };
 
+
 let buscarSala = async (idsala) => {
     return db.findOne("salas",idsala);
 };  
