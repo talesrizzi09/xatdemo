@@ -1,15 +1,15 @@
 const db = require("./db");
 
 let listarSalas = async () => {
-    let salas = await db.findAll("salas");
-    console.log("salas: "+salas);
-    return salas;
+  let salas = await db.findAll("salas");
+  console.log("Salas obtidas:", JSON.stringify(salas, null, 2));
+  return salas;
 };
 
 
-let buscarSala = async (idsala) => {
-    return db.findOne("salas",idsala);
-};  
+async function buscarSala(idsala) {
+  return db.findOne("salas", idsala);
+}  
 
 let atualizarMensagens = async (sala) => {
     return await db.updateOne("salas", sala,{_id:sala._id});
@@ -43,4 +43,4 @@ let sairSala = async (iduser) => {
 
 
 
-module.exports = {listarSalas, buscarSala, atualizarMensagens, buscarMensagens, sairSala};
+module.exports = {listarSalas,buscarSala, atualizarMensagens, buscarMensagens, sairSala};

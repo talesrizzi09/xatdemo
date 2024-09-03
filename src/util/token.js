@@ -1,29 +1,26 @@
 const jwt = require('jsonwebtoken');
 
-async function checkToken (token, id, key, nick) {
-    return jwt.verify(token, key, (err, decoded) => {
-        let autorizacao = false;
-        if (err) {
-            autorizacao = false;
-        }
-        if (decoded) {
-            if (decoded.id == id) {
-                autorizacao = true;
+// Função para verificar o token
+async function checkToken(token, id, key, nick) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, key, (err, decoded) => {
+            if (err) {
+                resolve(false);
+            } else {
+                resolve(decoded.id === id);
             }
-            else {
-                autorizacao = false;
-            }
-        }
-        return autorizacao;
-    }
-)};
+        });
+    });
+}
 
+// Função para gerar o token
 async function setToken (id, key, nick) {
     console.log("id: "+id);
     console.log("nick: "+nick);
 
-    if (id) {
-        return jwt.sign({id}, key, nick, {expiresIn: 28800});
+    if (id && nick) {
+        // Inclui tanto o id quanto o nick no payload do token
+        return jwt.sign({ id, nick }, key, { expiresIn: 28800 });
     }
     return false;
 };

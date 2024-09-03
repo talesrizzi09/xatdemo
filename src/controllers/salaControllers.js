@@ -1,8 +1,22 @@
 const salaModel = require('../model/salaModel');
 
-exports.get = async (req, res) => {
-    return await salaModel.listarSalas();
-};  
+async function get(req, res) {
+  console.log("Chamando listarSalas...");
+  try {
+      let salas = await salaModel.listarSalas();  // Chama a função listarSalas
+      console.log("Salas obtidas:", JSON.stringify(salas, null, 2));  // Exibe de forma legível
+      res.status(200).send(salas);  // Envia a resposta com as salas
+  } catch (error) {
+      console.error("Erro ao listar salas:", error);
+      res.status(500).send({msg: "Erro ao listar salas."});
+  }
+}
+
+module.exports = {
+  get
+};
+
+
 
 exports.entrar = async (iduser, idsala) => {
     const sala = await salaModel.buscarSala(idsala);
