@@ -1,6 +1,6 @@
 const { Timestamp } = require('mongodb');
 const salaModel = require('../model/salaModel');
-
+const usuarioModel = require('../model/usuarioModel');
 exports.get=async(req, res)=>{
     return await salaModel.listarSalas()
 }
@@ -10,6 +10,7 @@ exports.enviarMensagem = async (nick, msg, idsala) => {
     if (!Array.isArray(sala.msgs)) {
         sala.msgs = [];
     }
+
     let timestamp = Date.now()
     sala.msgs.push(
         {
@@ -19,7 +20,6 @@ exports.enviarMensagem = async (nick, msg, idsala) => {
         }
     )
     console.log(sala)
-    let resp = await salaModel.atualizarMensagens(sala);
     return { "msg": "OK", "timestamp":timestamp};
 }
 
@@ -73,6 +73,6 @@ exports.sair = async (iduser, idsala) => {
     user.sala = {}
     await usuarioModel.alterarUsuario(user);
     if (await usuarioModel.alterarUsuario(user)) {
-        return { msg: "Saiu da sala", timestamp: timestamp = Date.now() };
-    }
+        return { msg: "Saiu da sala", timestamp: timestamp = Date.now() };
+    }
 }

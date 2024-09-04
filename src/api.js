@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const token = require("./util/token.js")
+const token = require("./util/token.js");
+const { listarSalas } = require('./model/salaModel.js');
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -11,7 +12,7 @@ const router = express.Router();
 app.use('/', router.get('/sobre', (req, res, next) => {
     res.status(200).send ({
         "nome" : "CHAT-API",
-        "autor" : "talhes rizzi",
+        "autor" : "talhes rizzis",
         "versao" : "0.1.0"
     });
 }));
@@ -24,15 +25,17 @@ app.use("/entrar", router.post("/entrar", async(req, res, next) => {
 
 app.use("/salas",router.get("/salas", async (req, res,next) => {
     const token = require("./util/token");
-    const salaController = require("./controllers/salaControllers.js");
+    const salaController = require("./controllers/salaControllers");
     const test = await token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick);
+   
     console.log(test)
     if (test) {
         let resp = await salaController.get();
         res.status(200).send(resp);
     } else {
-        res.status(401).send({msg:"Usuário não autorizado"});
+        res.status(401).send({msg:"seu usuario nao esta autorizado, verifique"});
     }
+    console.log(listarSalas)
 })); 
 
 app.use("/sala/entrar", router.post("/sala/entrar", async (req, res) => {
@@ -49,15 +52,17 @@ app.use("/sala/entrar", router.post("/sala/entrar", async (req, res) => {
   
 app.use("/sala/enviar", router.post("/sala/enviar", async (req, res) => {
     const token = require("./util/token");
-    const salaController = require("../src/controllers/salaControllers.js");
-    if (!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
+    const salaController = require("../src/controllers/salaControllers");
+    if (token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)){
     let resp = await salaController.enviarMensagem(req.headers.nick, req.body.msg,req.body.idSala);
-    res.status(200).send(resp);
+    res.status(200).send(resp);} else{
+        res.status(401).send({msg:"mensagem nao enviada"})
+    }
 }))
   
 app.use("/sala/listar", router.get("/sala/listar", async (req, res) => {
     const token = require("./util/token");
-    const salaController = require("../src/controllers/salaControllers.js");
+    const salaController = require("../src/controllers/salaControllers");
     if (!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
     let resp = await salaController.buscarMensagens(req.query.idSala, req.query.timestamp);
     res.status(200).send(resp);
@@ -87,4 +92,4 @@ app.use("/", router.delete("/sair", async (req, res) => {
 
 }))
 
-module.exports = app;
+module.exports = app;

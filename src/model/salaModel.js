@@ -1,5 +1,4 @@
- const db = require("./db");
-
+const db = require("./db");
 
  async function listarSalas() {
  return await db.findAll("salas");
@@ -35,4 +34,4 @@ let buscarMensagens = async (idsala, timestamp)=>{
     return [];
 }
 
- module.exports = { listarSalas, atualizarMensagens, buscarMensagens, buscarUsuario, alterarUsuario, buscarSala}; 
+ module.exports = { listarSalas, atualizarMensagens, buscarMensagens, buscarUsuario, alterarUsuario, buscarSala};
