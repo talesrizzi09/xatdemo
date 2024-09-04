@@ -7,10 +7,7 @@ async function connect() {
     if (singleton) return singleton; 
 
     console.log("Connecting to DB at:", process.env.DB_HOST);
-    const client = new MongoClient(process.env.DB_HOST, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+    const client = new MongoClient(process.env.DB_HOST);
     await client.connect();
 
     singleton = client.db(process.env.DB_DATABASE);

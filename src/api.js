@@ -1,81 +1,90 @@
 const express = require('express');
+const path = require('path');
 const app = express();
-const router = express.Router();
-const token = require('./util/token')
-const salaController = require('./controllers/salaControllers')
+const token = require("./util/token.js")
 
-// Middleware para processamento de JSON e URL-encoded
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-// Rota para a página inicial
-router.get('/', (req, res) => {
-    res.status(200).send("<h1>API - CHAT</h1>");
-});
+const router = express.Router();
 
-// Rota para informações sobre a API
-router.get('/sobre', (req, res) => {
-    res.status(200).send({
-        "nome": "API - CHAT",
-        "versão": "0.1.0",
-        "autor": "Tales Rizzii"
+app.use('/', router.get('/sobre', (req, res, next) => {
+    res.status(200).send ({
+        "nome" : "CHAT-API",
+        "autor" : "talhes rizzi",
+        "versao" : "0.1.0"
     });
-});
+}));
 
-// Rota para listar salas
+app.use("/entrar", router.post("/entrar", async(req, res, next) => {
+    const usuarioController = require("./controllers/usuarioController.js");
+    let resp = await usuarioController.entrar(req.body.nick);
+    res.status(200).send(resp);
+}));
 
-// Rota para listar salas
-router.get('/salas', async (req, res) => {
-    const secretKey = 'inter'; // Mesma chave secreta usada na geração
-    try {
-        const tokenValido = await token.checkToken(req.headers.token, req.headers.iduser, secretKey, req.headers.nick);
-
-        if (tokenValido) {
-            await salaController.get(req, res); // Chama a função get do controlador para listar salas
-        } else {
-            res.status(401).send({msg: "Seu usuário não foi autorizado, verifique."});
-        }
-    } catch (error) {
-        console.error("Erro na requisição:", error);
-        res.status(500).send({msg: "Erro interno do servidor."});
-    }
-});
-
-
-module.exports = router;
-
-
-// Rota para entrar em uma sala
-router.post('/entrar', async (req, res) => {
-    const usuarioController = require('./controllers/usuarioController');
-
-    try {
-        let resp = await usuarioController.entrar(req.body.nick);
+app.use("/salas",router.get("/salas", async (req, res,next) => {
+    const token = require("./util/token");
+    const salaController = require("./controllers/salaControllers.js");
+    const test = await token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick);
+    console.log(test)
+    if (test) {
+        let resp = await salaController.get();
         res.status(200).send(resp);
-    } catch (error) {
-        res.status(500).send({ msg: "Erro ao entrar" });
+    } else {
+        res.status(401).send({msg:"Usuário não autorizado"});
     }
-});
+})); 
 
-// Rota para entrar na sala com verificação do token
-router.post('/salas/entrar', async (req, res) => {
-    const tokenValido = await token.checkToken(req.headers.token, req.headers.iduser, secretKey, req.headers.nick);
-    const salaController = require('./controllers/salaControllers');
-
-    try {
-        const autorizado = await token.checkToken(req.body.token, req.body.iduser, 'inter');
-        if (!autorizado) {
-            return res.status(401).send({ msg: "Acesso não autorizado" });
-        }
-
-        let resp = await salaController.entrar(req.body.iduser, req.query.idsala);
+app.use("/sala/entrar", router.post("/sala/entrar", async (req, res) => {
+    const token = require("./util/token");
+    const salaController = require("./controllers/salaControllers.js");
+    if (token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)){
+        let resp = await salaController.entrar(req.headers.iduser, req.query.idSala);
         res.status(200).send(resp);
-    } catch (error) {
-        res.status(500).send({ msg: "Erro ao entrar na sala" });
+    } else{
+        res.status(401).send({msg:"Usuário não autorizado"});
     }
-});
+    
+}));
+  
+app.use("/sala/enviar", router.post("/sala/enviar", async (req, res) => {
+    const token = require("./util/token");
+    const salaController = require("../src/controllers/salaControllers.js");
+    if (!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
+    let resp = await salaController.enviarMensagem(req.headers.nick, req.body.msg,req.body.idSala);
+    res.status(200).send(resp);
+}))
+  
+app.use("/sala/listar", router.get("/sala/listar", async (req, res) => {
+    const token = require("./util/token");
+    const salaController = require("../src/controllers/salaControllers.js");
+    if (!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
+    let resp = await salaController.buscarMensagens(req.query.idSala, req.query.timestamp);
+    res.status(200).send(resp);
+}))
 
-// Usa o router nas rotas principais
-app.use('/', router);
+
+app.use("/", router.delete("/sala/sair", async (req, res) => {
+    const token = require("./util/token");
+    const salaController = require("../src/controllers/salaControllers.js");
+    if (!token.checkToken(req.headers.token, req.headers.iduser, req.headers.nick)){ 
+    
+        return false;
+    }
+    const resp = await salaController.sair(req.headers.iduser, req.query.idSala)
+    res.status(200).send(resp)
+
+}))
+
+app.use("/", router.delete("/sair", async (req, res) => {
+    const token = require("./util/token");
+    const usuarioController = require("./controllers/usuarioController.js");
+    if (!token.checkToken(req.headers.token, req.headers.iduser, req.headers.nick)){ 
+        return false;
+    }
+    const resp = await usuarioController.sairChat(req.headers.iduser)
+    res.status(200).send(resp)
+
+}))
 
 module.exports = app;
