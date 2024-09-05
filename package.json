@@ -2,9 +2,9 @@
   "name": "chatapi",
   "version": "1.0.0",
   "description": "\"API-CHAT\"",
-  "main": "./bin/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./bin/index.js",
+    "start": "nodemon ./bin/server.js",
     "test": "echo \"Error: no test specified"
   
   },
