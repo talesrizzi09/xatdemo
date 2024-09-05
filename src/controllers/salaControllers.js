@@ -61,11 +61,12 @@ exports.entrar = async (iduser, idsala) => {
 
 exports.buscarMensagens = async (idsala, timestamp)=>{
     let mensagens=await salaModel.buscarMensagens(idsala, timestamp);
-    return{
-        "timestamp":mensagens[mensagens.length - 1].timestamp,
-        "msgs":mensagens
-    }
-}
+    return {
+      "timestamp":mensagens[mensagens.length - 1].timestamp,
+      "msgs":mensagens
+    };
+  }  
+
 exports.sair = async (iduser, idsala) => {
     const sala = await salaModel.buscarSala(idsala);
     let usuarioModel = require('../model/usuarioModel');

@@ -1,4 +1,5 @@
 const db = require("./db");
+const Sala = require('./db');
 
  async function listarSalas() {
  return await db.findAll("salas");
@@ -20,18 +21,18 @@ let alterarUsuario = async(user)=>{
 }
 
 
-let buscarMensagens = async (idsala, timestamp)=>{
+let buscarMensagens = async (idsala, timestamp) => {
     let sala = await buscarSala(idsala);
-    if(sala.msgs){
-        let msgs=[];
-        sala.msgs.forEach((msg)=>{
-            if(msg.timestamp >= timestamp){
-                msgs.push(msg);
-            }
-        });
-        return msgs;
+    if (sala.msgs) {
+      let msgs = [];
+      sala.msgs.forEach((msg) => {
+        if (msg.timestamp >= timestamp) {
+          msgs.push(msg);
+        }
+      });
+      return msgs;
     }
     return [];
+    
 }
-
  module.exports = { listarSalas, atualizarMensagens, buscarMensagens, buscarUsuario, alterarUsuario, buscarSala};

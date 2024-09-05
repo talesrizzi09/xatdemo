@@ -62,7 +62,7 @@ app.use("/sala/enviar", router.post("/sala/enviar", async (req, res) => {
   
 app.use("/sala/listar", router.get("/sala/listar", async (req, res) => {
     const token = require("./util/token");
-    const salaController = require("../src/controllers/salaControllers");
+    const salaController = require("../src/controllers/salaControllers.js");
     if (!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
     let resp = await salaController.buscarMensagens(req.query.idSala, req.query.timestamp);
     res.status(200).send(resp);
