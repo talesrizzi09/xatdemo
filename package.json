@@ -4,7 +4,7 @@
   "description": "\"API-CHAT\"",
   "main": "index.js",
   "scripts": {
-    "start": "./bin/server.js",
+    "start": "node ./bin/server.js",
     "test": "echo \"Error: no test specified"
   },
   "repository": {
