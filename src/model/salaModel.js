@@ -1,5 +1,5 @@
 const db = require("./db");
-const Sala = require('./db');
+const sala = require('./db');
 
  async function listarSalas() {
  return await db.findAll("salas");

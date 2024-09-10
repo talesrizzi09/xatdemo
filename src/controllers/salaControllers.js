@@ -1,6 +1,7 @@
 const { Timestamp } = require('mongodb');
 const salaModel = require('../model/salaModel');
 const usuarioModel = require('../model/usuarioModel');
+
 exports.get=async(req, res)=>{
     return await salaModel.listarSalas()
 }
@@ -11,7 +12,7 @@ exports.enviarMensagem = async (nick, msg, idsala) => {
         sala.msgs = [];
     }
 
-    let timestamp = Date.now()
+    timestamp = Date.now()
     sala.msgs.push(
         {
             nick: nick,

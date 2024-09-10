@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon ./bin/server.js",
     "test": "echo \"Error: no test specified"
-  
   },
   "repository": {
     "type": "git",
@@ -28,7 +27,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.6.0"
+    "mongoose": "^8.6.0",
+    "nodemon": "^3.1.4",
+    "path": "^0.12.7"
   }
-
 }
